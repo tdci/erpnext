@@ -1,0 +1,90 @@
+{
+ "autoname": "field:bir_company_name",
+ "creation": "2020-05-05 16:11:16.966894",
+ "doctype": "DocType",
+ "document_type": "Setup",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "bir_company_name"
+ ],
+ "fields": [
+  {
+   "fieldname": "bir_company_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "BIR Company Name",
+   "reqd": 1,
+   "unique": 1
+  }
+ ],
+ "icon": "fa-fa-certificate",
+ "modified": "2020-05-05 16:11:16.966894",
+ "modified_by": "Administrator",
+ "module": "Accounts",
+ "name": "BIR Company",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Purchase User",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Auditor",
+   "share": 1
+  }
+ ],
+ "quick_entry": 1,
+ "search_fields": "bir_company_name",
+ "show_name_in_global_search": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "bir_company_name",
+ "track_changes": 1
+}
