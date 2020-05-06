@@ -109,8 +109,10 @@ cur_frm.cscript.calculate_total = function(doc){
 	doc.total_claimed_amount = 0;
 	doc.total_sanctioned_amount = 0;
 	$.each((doc.expenses || []), function(i, d) {
-		doc.total_claimed_amount += d.amount;
-		doc.total_sanctioned_amount += d.sanctioned_amount;
+		// doc.total_claimed_amount += d.amount;
+		// doc.total_sanctioned_amount += d.sanctioned_amount;
+		doc.total_claimed_amount += d.gross_amount;
+		doc.total_sanctioned_amount += d.gross_amount;
 	});
 };
 
