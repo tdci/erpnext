@@ -8,6 +8,7 @@
  "engine": "InnoDB",
  "field_order": [
   "project_name",
+  "department",
   "status",
   "project_type",
   "is_active",
@@ -18,7 +19,6 @@
   "expected_start_date",
   "expected_end_date",
   "priority",
-  "department",
   "customer_details",
   "customer",
   "column_break_14",
