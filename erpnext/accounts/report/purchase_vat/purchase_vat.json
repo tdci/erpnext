@@ -1,0 +1,38 @@
+{
+ "add_total_row": 0,
+ "creation": "2020-03-23 15:30:14.932458",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": "Target Display Co., Inc.",
+ "modified": "2020-04-17 09:29:32.800653",
+ "modified_by": "Administrator",
+ "module": "Accounts",
+ "name": "Purchase VAT",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT\r\n  purchInv.name as \"Purchase Invoice:Link/Purchase Invoice:200\",\r\n  purchInv.posting_date as \"Posting Date:Date:120\",\r\n  purchInv.supplier_name as \"Supplier:Link/Supplier:150\",\r\n  purchInvItem.item_name as \"Item Name:100\",\r\n  birCompany.bir_company_name as \"BIR Name:100\",\r\n  purchInvItem.qty as \"Qty:100\",\r\n  purchInvItem.base_net_amount as \"Net Amount:100\",\r\n  purchInv.bill_no as \"Supplier Invoice No:100\",\r\n  purchInv.bill_date as \"Supplier Invoice Date:100\",\r\n  case when isnull(itemTaxDetail.tax_type) then purchInv.taxes_and_charges else concat(purchInvItem.item_tax_template,\" (ITEM-WISE)\") end as \"Purchase Taxes and Charges:100\",\r\n  case when isnull(itemTaxDetail.tax_type) then transTax.rate else itemTaxDetail.tax_rate end as \"Tax Rate:100\",\r\n  case when isnull(itemTaxDetail.tax_type) then purchInvItem.base_net_amount*ifnull(transTax.rate/100,0) else purchInvItem.base_net_amount*ifnull(itemTaxDetail.tax_rate/100,0) end as \"Tax Amount:100\"\r\nFROM `tabPurchase Invoice` as purchInv inner join\r\n`tabPurchase Invoice Item` as purchInvItem on purchInv.name = purchInvItem.parent left outer join \r\n`tabPurchase Taxes and Charges` as transTax on purchInv.taxes_and_charges=transTax.parent left outer join \r\n`tabItem Tax Template Detail` as itemTaxDetail on purchInvItem.item_tax_template=itemTaxDetail.parent and transTax.account_head=itemTaxDetail.tax_type left outer join \r\n`tabBIR Company` as birCompany on birCompany.name = purchInvItem.bir_company\r\nWHERE purchInv.docstatus>0 and not purchInv.status in (\"Cancelled\", \"Draft\") and isnull(itemTaxDetail.tax_type)=0 and transTax.add_deduct_tax=\"Add\" and purchInv.posting_date >= %(from_date)s and purchInv.posting_date <= %(to_date)s",
+ "ref_doctype": "Purchase Invoice",
+ "report_name": "Purchase VAT",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "Accounts User"
+  },
+  {
+   "role": "Auditor"
+  },
+  {
+   "role": "Sales User"
+  },
+  {
+   "role": "Purchase User"
+  },
+  {
+   "role": "Accounts Manager"
+  }
+ ]
+}
