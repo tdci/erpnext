@@ -1,6 +1,6 @@
 {
  "autoname": "field:bir_company_name",
- "creation": "2020-03-26 09:14:11.778075",
+ "creation": "2020-05-05 16:11:16.966894",
  "doctype": "DocType",
  "document_type": "Setup",
  "editable_grid": 1,
@@ -19,7 +19,7 @@
   }
  ],
  "icon": "fa-fa-certificate",
- "modified": "2020-03-26 09:14:11.778075",
+ "modified": "2020-05-05 16:11:16.966894",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "BIR Company",
