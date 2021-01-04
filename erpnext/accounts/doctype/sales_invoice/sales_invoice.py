@@ -225,8 +225,8 @@ class SalesInvoice(SellingController):
 			frappe.throw(_("At least one mode of payment is required for POS invoice."))
 
 	def before_cancel(self):
+		super(SalesInvoice, self).before_cancel()
 		self.update_time_sheet(None)
-
 
 	def on_cancel(self):
 		super(SalesInvoice, self).on_cancel()
@@ -398,6 +398,8 @@ class SalesInvoice(SellingController):
 		from erpnext.stock.get_item_details import get_pos_profile_item_details, get_pos_profile
 		if not self.pos_profile:
 			pos_profile = get_pos_profile(self.company) or {}
+			if not pos_profile:
+				frappe.throw(_("No POS Profile found. Please create a New POS Profile first"))
 			self.pos_profile = pos_profile.get('name')
 
 		pos = {}
@@ -467,6 +469,11 @@ class SalesInvoice(SellingController):
 		return frappe.db.sql("select abbr from tabCompany where name=%s", self.company)[0][0]
 
 	def validate_debit_to_acc(self):
+		if not self.debit_to:
+			self.debit_to = get_party_account("Customer", self.customer, self.company)
+			if not self.debit_to:
+				self.raise_missing_debit_credit_account_error("Customer", self.customer)
+
 		account = frappe.get_cached_value("Account", self.debit_to,
 			["account_type", "report_type", "account_currency"], as_dict=True)
 
@@ -570,7 +577,8 @@ class SalesInvoice(SellingController):
 
 	def validate_pos(self):
 		if self.is_return:
-			if flt(self.paid_amount) + flt(self.write_off_amount) - flt(self.grand_total) > \
+			invoice_total = self.rounded_total or self.grand_total
+			if flt(self.paid_amount) + flt(self.write_off_amount) - flt(invoice_total) > \
 				1.0/(10.0**(self.precision("grand_total") + 1.0)):
 					frappe.throw(_("Paid amount + Write Off Amount can not be greater than Grand Total"))
 
@@ -1394,6 +1402,7 @@ def make_delivery_note(source_name, target_doc=None):
 	def set_missing_values(source, target):
 		target.ignore_pricing_rule = 1
 		target.run_method("set_missing_values")
+		target.run_method("set_po_nos")
 		target.run_method("calculate_taxes_and_totals")
 
 	def update_item(source_doc, target_doc, source_parent):

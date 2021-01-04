@@ -263,13 +263,14 @@ class Subscription(Document):
 			invoice.set_taxes()
 
 		# Due date
-		invoice.append(
-			'payment_schedule',
-			{
-				'due_date': add_days(self.current_invoice_end, cint(self.days_until_due)),
-				'invoice_portion': 100
-			}
-		)
+		if self.days_until_due:
+			invoice.append(
+				'payment_schedule',
+				{
+					'due_date': add_days(self.current_invoice_end, cint(self.days_until_due)),
+					'invoice_portion': 100
+				}
+			)
 
 		# Discounts
 		if self.additional_discount_percentage:
@@ -406,6 +407,15 @@ class Subscription(Document):
 				self.update_subscription_period(add_days(self.current_invoice_end, 1))
 			else:
 				self.set_status_grace_period()
+
+			if getdate() > getdate(self.current_invoice_end):
+				self.update_subscription_period(add_days(self.current_invoice_end, 1))
+
+			# Generate invoices periodically even if current invoice are unpaid
+			if self.generate_new_invoices_past_due_date and not self.is_current_invoice_generated() and (self.is_postpaid_to_invoice()
+				or self.is_prepaid_to_invoice()):
+				prorate = frappe.db.get_single_value('Subscription Settings', 'prorate')
+				self.generate_invoice(prorate)
 
 	@staticmethod
 	def is_not_outstanding(invoice):
